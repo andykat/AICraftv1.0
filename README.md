@@ -8,7 +8,7 @@ Game occurs on a 5x8 map, with players' bases on opposite sides.<br />
 Gold is earned every frame, and can be spent to spawn units.<br />
 Units are able to move and attack, whoever kills the opponent's nexus wins<br />
 
-# The numbers, what do they mean??
+# The numbers Alan, what do they mean??
 all numbers are still in testing.
 ###Nexus
 Generates 5 gold/frame<br />
