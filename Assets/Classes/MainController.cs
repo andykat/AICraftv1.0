@@ -12,10 +12,10 @@ public class MainController : MonoBehaviour {
 
 	//All data for units
 	private int unitN = 3;
-	private UnitData[] unitData = new UnitData[4]; 
+	private Unit[] unitData = new Unit[4]; 
 
 	void Start () {
-	
+		
 	}
 	
 
@@ -27,13 +27,13 @@ public class MainController : MonoBehaviour {
 	private void initUnitData()
 	{
 		// base
-		unitData [1] = new UnitData (1, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f);
+		unitData [1] = new Unit (1, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f);
 
 		// marine
-		unitData [2] = new UnitData (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f);
+		unitData [2] = new Unit (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f);
 
 		//zergling
-		unitData [3] = new UnitData (3, 50, 0.2f, 0.2f, 10, 0, 0.0f, 0.0f, 0.0f);
+		unitData [3] = new Unit (3, 50, 0.2f, 0.2f, 10, 0, 0.0f, 0.0f, 0.0f);
 	}
 }
 

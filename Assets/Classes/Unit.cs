@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UnitData {
+public class Unit {
 	private int type = 0;
 	private int health = 0;
 	private float moveSpeed = 0.0f;
@@ -12,7 +12,7 @@ public class UnitData {
 	private float y = 0.0f;
 	private float rotato = 0.0f;
 
-	public UnitData(int tType, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, int tTeam, float tX, float tY, float tRotato)
+	public Unit(int tType, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, int tTeam, float tX, float tY, float tRotato)
 	{
 		type = tType;
 		health = tHealth;
