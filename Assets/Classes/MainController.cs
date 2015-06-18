@@ -27,13 +27,15 @@ public class MainController : MonoBehaviour {
 	private void initUnitData()
 	{
 		// base
-		unitData [1] = new Unit (1, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f);
-
-		// marine
-		unitData [2] = new Unit (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f);
+		unitData [1] = new Unit (1, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0);
 
 		//zergling
-		unitData [3] = new Unit (3, 50, 0.2f, 0.2f, 10, 0, 0.0f, 0.0f, 0.0f);
+		unitData [2] = new Unit (3, 50, 0.2f, 0.2f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
+
+		// marine
+		unitData [3] = new Unit (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
+
+
 	}
 }
 
