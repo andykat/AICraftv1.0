@@ -12,6 +12,21 @@ public class SwarmAI : AI {
 		Command c = new Command();
 		c.addSpawn (2);
 		commands.Add (c);
+
+		for (int i=1; i<myUnits.Count; i++) {
+			Command mc = new Command();
+			if(myUnits[0].getY () - enemyUnits[1].getY () < 0)
+			{
+				mc.addMove(myUnits[i].getID(), 1.0f + ((float)i)/4.0f);
+			}
+			else
+			{
+				mc.addMove(myUnits[i].getID(), -1.0f - ((float)i)/4.0f);
+			}
+
+			commands.Add(mc);
+		}
+
 		return commands;
 	}
 }

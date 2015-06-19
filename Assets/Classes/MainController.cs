@@ -14,6 +14,8 @@ public class MainController : MonoBehaviour {
 	private int startingResource = 40;
 	private int resourceIncrease = 3;
 
+	private float charRadius = 0.5f;
+
 	//Board Data
 	private float boardHeight = 8.0f;
 	private float boardWidth = 5.0f;
@@ -40,8 +42,8 @@ public class MainController : MonoBehaviour {
 		units [1] = new List<Unit> ();
 
 		//add nexus
-		units [0].Add (createUnit(1, 0, 0.0f, -3.5f, PI/2.0f, 1));
-		units [1].Add (createUnit (1, 1, 0.0f, 3.5f, 1.5f*PI,1001));
+		units [0].Add (createUnit(1, 0, 0.0f, -boardHeight/2.0f + charRadius, PI/2.0f, 1));
+		units [1].Add (createUnit (1, 1, 0.0f, boardHeight/2.0f - charRadius, 1.5f*PI,1001));
 
 		unitGOs [0].Add (Instantiate(unitObjectPreFabs[0]));
 		unitGOs [1].Add (Instantiate(unitObjectPreFabs[1]));
@@ -92,7 +94,9 @@ public class MainController : MonoBehaviour {
 	//Runs commands received from AI Class
 	private void runCommands(int player, List<Command> lc)
 	{
-		for (int i=0; i<lc.Count; i++) {
+		//only runs first 100 commands
+		int tN = minimum (100, lc.Count);
+		for (int i=0; i<tN; i++) {
 			if(lc[i].getType() == 1)
 			{
 				//spawn
@@ -101,6 +105,7 @@ public class MainController : MonoBehaviour {
 			else if(lc[i].getType() == 2)
 			{
 				//move
+				move(player, lc[i].getSelfID(), lc[i].getFloat(0));
 			}
 			else if(lc[i].getType() == 3)
 			{
@@ -109,9 +114,36 @@ public class MainController : MonoBehaviour {
 		}
 	}
 
-	private void move(int player, int id, int x, int y)
+	private void move(int player, int id, float rotato)
 	{
+		//search for index of ID
+		int cIndex = -1;
+		for (int i=0; i<units[player].Count; i++) {
+			if(units[player][i].getID() == id)
+			{
+				cIndex = i;
+				break;
+			}
+		}
+		if (cIndex == -1) {
+			//id not found
+			return;
+		}
 
+		//tried to move unit on the other team!
+		if (player != units [player] [cIndex].getTeam ()) {
+			return;
+		}
+
+		units [player] [cIndex].setRotato (rotato);
+		unitGOs [player] [cIndex].transform.eulerAngles = new Vector3 (0.0f, 0.0f, rotato * 180.0f / PI);
+		float newX = units [player] [cIndex].getX () + units [player] [cIndex].getMoveSpeed () * ((float)Math.Cos (rotato));
+		float newY = units [player] [cIndex].getY () + units [player] [cIndex].getMoveSpeed () * ((float)Math.Sin (rotato));
+
+		units [player] [cIndex].setX (newX);
+		units [player] [cIndex].setY (newY);
+
+		unitGOs [player] [cIndex].transform.position = new Vector2 (newX, newY);
 	}
 
 	private void spawn(int player, int type)
@@ -189,6 +221,14 @@ public class MainController : MonoBehaviour {
 		unitData [3] = new Unit (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
 		unitData [3].setCost (80);
 
+	}
+	private int minimum(int a, int b)
+	{
+		if(a<b)
+		{
+			return a;
+		}
+		return b;
 	}
 }
 
