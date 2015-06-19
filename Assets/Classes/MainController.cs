@@ -30,6 +30,15 @@ public class MainController : MonoBehaviour {
 	private int[] ids = new int[2];
 
 	private List<GameObject>[] unitGOs = new List<GameObject>[2];
+
+	//Loads the AI that you choose
+	private void loadAI()
+	{
+		players [0] = new SwarmAI ();
+		players [1] = new SwarmAI ();
+	}
+
+
 	void Start () {
 		//Load AI
 		loadAI ();
@@ -90,6 +99,34 @@ public class MainController : MonoBehaviour {
 		runCommands (0, p0Commands);
 		runCommands (1, p1Commands);
 
+		for(int i=0;i<2;i++)
+		{
+			for(int j=0;j<units[i].Count;j++)
+			{
+				if(units[i][j].getHealth() < 1)
+				{
+					//unit has died
+					if(j==0)
+					{
+						endGame(i);
+					}
+					else
+					{
+						units[i].RemoveAt(j);
+						Destroy(unitGOs[i][j]);
+						unitGOs[i].RemoveAt(j);
+					}
+				}
+			}
+		}
+	}
+
+	private void endGame(int loser)
+	{
+		timeCurrent = -1000000.0f;
+		framePeriod = 1000000.0f;
+
+
 	}
 
 	//Runs commands received from AI Class
@@ -111,22 +148,36 @@ public class MainController : MonoBehaviour {
 			else if(lc[i].getType() == 3)
 			{
 				//attack
-				//attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
+				attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
 			}
 		}
+	}
+
+	private void attack(int player, int selfID, int enemyID)
+	{
+		//search for indexes of ids'
+		int selfIndex = idFind (player, selfID);
+		int enemyPlayer = getEnemy (player);
+		int enemyIndex = idFind (enemyPlayer, enemyID);
+		if (selfIndex == -1 || enemyIndex == -1) {
+			return;
+		}
+
+		//check if enemy is in attack Range
+		if (units [player] [selfIndex].getAttackRange () > dist (units [player] [selfIndex].getX (), units [player] [selfIndex].getY ()
+		                                         , units [enemyPlayer] [enemyIndex].getX (), units [enemyPlayer] [enemyIndex].getY ())) 
+		{
+			units[enemyPlayer][enemyIndex].setHealth(units[enemyPlayer][enemyIndex].getHealth() - 
+			                                         units[player][selfIndex].getAttackDamage());
+		}
+		
 	}
 
 	private void move(int player, int id, float rotato)
 	{
 		//search for index of ID
-		int cIndex = -1;
-		for (int i=0; i<units[player].Count; i++) {
-			if(units[player][i].getID() == id)
-			{
-				cIndex = i;
-				break;
-			}
-		}
+		int cIndex = idFind(player, id);
+
 		if (cIndex == -1) {
 			//id not found
 			return;
@@ -205,12 +256,6 @@ public class MainController : MonoBehaviour {
 
 	}
 
-	//Loads the AI that you choose
-	private void loadAI()
-	{
-		players [0] = new SwarmAI ();
-		players [1] = new SwarmAI ();
-	}
 
 
 	//initialize data for units
@@ -221,14 +266,37 @@ public class MainController : MonoBehaviour {
 		unitData [1].setCost (100000);
 
 		//zergling
-		unitData [2] = new Unit (3, 50, 0.2f, 0.2f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
+		unitData [2] = new Unit (3, 50, 0.2f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
 		unitData [2].setCost (50);
 
 		// marine
-		unitData [3] = new Unit (2, 50, 0.1f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
+		unitData [3] = new Unit (2, 50, 0.1f, 1.4f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
 		unitData [3].setCost (80);
 
 	}
+
+	//finds index of unit with ID in units List
+	private int idFind(int player, int id)
+	{
+		int cIndex = -1;
+		for (int i=0; i<units[player].Count; i++) {
+			if(units[player][i].getID() == id)
+			{
+				cIndex = i;
+				break;
+			}
+		}
+		return cIndex;
+	}
+
+	private int getEnemy(int player)
+	{
+		if (player == 0) {
+			return 1;
+		}
+		return 0;
+	}
+
 	private int minimum(int a, int b)
 	{
 		if(a<b)
@@ -236,6 +304,10 @@ public class MainController : MonoBehaviour {
 			return a;
 		}
 		return b;
+	}
+	private float dist(float x1, float y1, float x2, float y2)
+	{
+		return ((float)Math.Sqrt(((double) (  (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)  )   )));
 	}
 }
 
