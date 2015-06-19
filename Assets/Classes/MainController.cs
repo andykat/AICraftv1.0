@@ -46,8 +46,8 @@ public class MainController : MonoBehaviour {
 		units [0].Add (createUnit(1, 0, 0.0f, -halfBoardHeight + charRadius, PI/2.0f, 1));
 		units [1].Add (createUnit (1, 1, 0.0f, halfBoardHeight - charRadius, 1.5f*PI,1001));
 
-		unitGOs [0].Add (Instantiate(unitObjectPreFabs[0]));
-		unitGOs [1].Add (Instantiate(unitObjectPreFabs[1]));
+		unitGOs [0].Add (Instantiate(unitObjectPreFabs[0]) as GameObject);
+		unitGOs [1].Add (Instantiate(unitObjectPreFabs[1]) as GameObject);
 
 		unitGOs [0] [0].transform.position = new Vector2 (units [0] [0].getX (), units [0] [0].getY ());
 		unitGOs [1] [0].transform.position = new Vector2 (units [1] [0].getX (), units [1] [0].getY ());
@@ -111,6 +111,7 @@ public class MainController : MonoBehaviour {
 			else if(lc[i].getType() == 3)
 			{
 				//attack
+				//attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
 			}
 		}
 	}
@@ -187,7 +188,7 @@ public class MainController : MonoBehaviour {
 
 
 		//add unit gameObject
-		unitGOs [player].Add (Instantiate (unitObjectPreFabs [type * 2 - 2 + player]));
+		unitGOs [player].Add (Instantiate (unitObjectPreFabs [type * 2 - 2 + player]) as GameObject);
 
 		unitGOs [player] [cIndex].transform.position = new Vector2 (units [player] [cIndex].getX (), units [player] [cIndex].getY ());
 		
