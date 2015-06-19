@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Unit {
 	private int type = 0;
+	private int cost = 0;
 	private int health = 0;
 	private float moveSpeed = 0.0f;
 	private float attackRange = 0.0f;
@@ -28,6 +29,13 @@ public class Unit {
 	}
 
 	public int getType() {return type;}
+
+	public int getCost() {
+		return cost;
+	}
+	public void setCost(int tCost){
+		cost = tCost;
+	}
 	
 	public int getHealth() {return health;}
 	
