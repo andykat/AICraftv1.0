@@ -23,13 +23,14 @@ public class MainController : MonoBehaviour {
 	private float halfBoardWidth = 2.5f;
 
 	//All data for units
-	private Unit[] unitData = new Unit[4]; 
+	private Unit[] unitData = new Unit[5]; 
 	private List<Unit>[] units = new List<Unit>[2];
 	private AI[] players = new AI[2];
 	private int[] resources = new int[2];
 	private int[] ids = new int[2];
 
 	private List<GameObject>[] unitGOs = new List<GameObject>[2];
+
 
 	//Loads the AI that you choose
 	private void loadAI()
@@ -184,6 +185,20 @@ public class MainController : MonoBehaviour {
 		if (units [player] [selfIndex].getAttackRange () > dist (units [player] [selfIndex].getX (), units [player] [selfIndex].getY ()
 		                                         , units [enemyPlayer] [enemyIndex].getX (), units [enemyPlayer] [enemyIndex].getY ())) 
 		{
+			if(units[enemyPlayer][enemyIndex].getIsGround())
+			{
+				if(!units[player][selfIndex].getCanAttackGround())
+				{
+					return;
+				}
+			}
+			else
+			{
+				if(!units[player][selfIndex].getCanAttackAir())
+				{
+					return;
+				}
+			}
 			units[enemyPlayer][enemyIndex].setHealth(units[enemyPlayer][enemyIndex].getHealth() - 
 			                                         units[player][selfIndex].getAttackDamage());
 		}
@@ -224,11 +239,11 @@ public class MainController : MonoBehaviour {
 	private void spawn(int player, int type)
 	{
 		//calculate spawn location
-		float spawnX = units [player] [0].getX();
+		float spawnX = UnityEngine.Random.Range(-halfBoardWidth, halfBoardWidth);
 		float spawnY = units [player] [0].getY() + ((float)Math.Sin (units [player] [0].getRotato())) * 0.5f;
 		Unit newUnit;
 		//add unit to list
-		if (type < 2 || type > 3) {
+		if (type < 2 || type > 4) {
 			//wrong type
 			return;
 		}
@@ -267,8 +282,9 @@ public class MainController : MonoBehaviour {
 	//sets up Unit
 	private Unit createUnit(int u, int team, float x, float y, float rotato, int id)
 	{
-		Unit tUnit = new Unit (unitData [u].getType(), unitData [u].getHealth(), unitData [u].getMoveSpeed(), 
-		                 unitData [u].getAttackRange() , unitData [u].getAttackDamage(), team, x, y, rotato, id);
+		Unit tUnit = new Unit (unitData [u].getType(), unitData[u].getCost(), unitData [u].getHealth(), unitData [u].getMoveSpeed(), 
+		                 unitData [u].getAttackRange() , unitData [u].getAttackDamage(), team, x, y, rotato, id, 
+		                       unitData[u].getIsGround(), unitData[u].getCanAttackGround(), unitData[u].getCanAttackAir());
 		return tUnit;
 
 	}
@@ -279,16 +295,16 @@ public class MainController : MonoBehaviour {
 	private void initUnitData()
 	{
 		// base
-		unitData [1] = new Unit (1, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0);
-		unitData [1].setCost (100000);
+		unitData [1] = new Unit (1, 100000, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false);
 
 		//zergling
-		unitData [2] = new Unit (3, 50, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
-		unitData [2].setCost (50);
+		unitData [2] = new Unit (2, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false);
 
 		// marine
-		unitData [3] = new Unit (2, 50, 0.1f, 1.4f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
-		unitData [3].setCost (80);
+		unitData [3] = new Unit (3, 80, 90, 0.1f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true);
+
+		//the flying triangle
+		unitData [4] = new Unit (4, 80, 35, 0.2f, 1.0f, 12, 0, 0.0f, 0.0f, 0.0f, 0, false, true, true);
 
 	}
 

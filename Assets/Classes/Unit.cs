@@ -13,10 +13,15 @@ public class Unit {
 	private float y = 0.0f;
 	private float rotato = 0.0f;
 	private int ID = 0;
-
-	public Unit(int tType, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, int tTeam, float tX, float tY, float tRotato, int tid)
+	private bool isGround = true;
+	private bool canAttackGround = true;
+	private bool canAttackAir = false;
+	public Unit(int tType, int tCost, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, 
+	            int tTeam, float tX, float tY, float tRotato, int tid, bool tIsGround, bool tCanAttackGround, 
+	            bool tCanAttackAir)
 	{
 		type = tType;
+		cost = tCost;
 		health = tHealth;
 		moveSpeed = tMoveSpeed;
 		attackRange = tAttackRange;
@@ -26,6 +31,9 @@ public class Unit {
 		y = tY;
 		rotato = tRotato;
 		ID = tid;
+		isGround = tIsGround;
+		canAttackGround = tCanAttackGround;
+		canAttackAir = tCanAttackAir;
 	}
 
 	public int getType() {return type;}
@@ -65,4 +73,13 @@ public class Unit {
 		return ID;
 	}
 
+	public bool getIsGround(){
+		return isGround;
+	}
+	public bool getCanAttackGround(){
+		return canAttackGround;
+	}
+	public bool getCanAttackAir(){
+		return canAttackAir;
+	}
 }

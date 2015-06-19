@@ -13,7 +13,7 @@ public class SwarmAI : AI {
 
 		//spawn marines whenever possible
 		Command spawnc = new Command();
-		spawnc.addSpawn (2);
+		spawnc.addSpawn (3);
 		commands.Add (spawnc);
 
 		float dir = -1.5708f;
@@ -34,6 +34,20 @@ public class SwarmAI : AI {
 				//check if enemy is within attack Rnage
 				if(dist(tx,ty, enemyUnits[j].getX (), enemyUnits[j].getY ()) < attackRange)
 				{
+					if(enemyUnits[j].getIsGround())
+					{
+						if(!myUnits[i].getCanAttackGround())
+						{
+							continue;
+						}
+					}
+					else
+					{
+						if(!myUnits[i].getCanAttackAir())
+						{
+							continue;
+						}
+					}
 					//Sends attack command
 					Command tAttack = new Command();
 					tAttack.addAttack(myUnits[i].getID(), enemyUnits[j].getID());

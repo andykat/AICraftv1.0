@@ -14,7 +14,7 @@ public class DumbMarinesAI : AI {
 		
 		//spawn marines whenever possible
 		Command spawnc = new Command();
-		spawnc.addSpawn (3);
+		spawnc.addSpawn (4);
 		commands.Add (spawnc);
 		
 		float dir = -1.5708f;
