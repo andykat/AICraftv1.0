@@ -15,7 +15,7 @@ public class SwarmAI : AI {
 
 		for (int i=1; i<myUnits.Count; i++) {
 			Command mc = new Command();
-			if(myUnits[0].getY () - enemyUnits[1].getY () < 0)
+			if(myUnits[0].getY () - enemyUnits[0].getY () < 0)
 			{
 				mc.addMove(myUnits[i].getID(), 1.0f + ((float)i)/4.0f);
 			}

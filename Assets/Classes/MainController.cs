@@ -19,9 +19,10 @@ public class MainController : MonoBehaviour {
 	//Board Data
 	private float boardHeight = 8.0f;
 	private float boardWidth = 5.0f;
+	private float halfBoardHeight = 4.0f;
+	private float halfBoardWidth = 2.5f;
 
 	//All data for units
-	private int unitN = 3;
 	private Unit[] unitData = new Unit[4]; 
 	private List<Unit>[] units = new List<Unit>[2];
 	private AI[] players = new AI[2];
@@ -42,8 +43,8 @@ public class MainController : MonoBehaviour {
 		units [1] = new List<Unit> ();
 
 		//add nexus
-		units [0].Add (createUnit(1, 0, 0.0f, -boardHeight/2.0f + charRadius, PI/2.0f, 1));
-		units [1].Add (createUnit (1, 1, 0.0f, boardHeight/2.0f - charRadius, 1.5f*PI,1001));
+		units [0].Add (createUnit(1, 0, 0.0f, -halfBoardHeight + charRadius, PI/2.0f, 1));
+		units [1].Add (createUnit (1, 1, 0.0f, halfBoardHeight - charRadius, 1.5f*PI,1001));
 
 		unitGOs [0].Add (Instantiate(unitObjectPreFabs[0]));
 		unitGOs [1].Add (Instantiate(unitObjectPreFabs[1]));
@@ -139,6 +140,11 @@ public class MainController : MonoBehaviour {
 		unitGOs [player] [cIndex].transform.eulerAngles = new Vector3 (0.0f, 0.0f, rotato * 180.0f / PI);
 		float newX = units [player] [cIndex].getX () + units [player] [cIndex].getMoveSpeed () * ((float)Math.Cos (rotato));
 		float newY = units [player] [cIndex].getY () + units [player] [cIndex].getMoveSpeed () * ((float)Math.Sin (rotato));
+
+		if (newX > halfBoardWidth || newX < -halfBoardWidth || newY > halfBoardHeight || newY < -halfBoardHeight) {
+			//out of bounds
+			return;
+		}
 
 		units [player] [cIndex].setX (newX);
 		units [player] [cIndex].setY (newY);
