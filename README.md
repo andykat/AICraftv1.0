@@ -23,6 +23,7 @@ May be given attack in the future<br />
 0.3 movement speed<br />
 0.2 attack range<br />
 10 attack damage<br />
+only attacks ground<br />
 
 ###Marine
 80 Gold<br />
@@ -30,13 +31,16 @@ May be given attack in the future<br />
 0.1 movement speed<br />
 0.6 attack range<br />
 5 attack damage<br />
+attacks ground and air <br />
 
 ###Flying Triangle
+flying unit <br />
 80 Gold<br />
 35 Health<br />
 0.2 Movement Speed<br />
 1.0 Attack Range<br />
 12 Attack Damage<br />
+attack ground and air <br />
 
 #Commands
 Commands are sent from a C# class inheriting the AI interface.<br />
