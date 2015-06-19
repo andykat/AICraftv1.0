@@ -18,29 +18,36 @@ May be given attack in the future<br />
 
 ##Spawnable Units
 ###Zergling
-50 Gold<br />
-50 Health<br />
-0.2 movement speed<br />
+40 Gold<br />
+40 Health<br />
+0.3 movement speed<br />
 0.2 attack range<br />
 10 attack damage<br />
 
 ###Marine
 80 Gold<br />
-50 health<br />
+90 health<br />
 0.1 movement speed<br />
 0.6 attack range<br />
-10 attack damage<br />
+5 attack damage<br />
+
+###Flying Triangle
+80 Gold<br />
+35 Health<br />
+0.2 Movement Speed<br />
+1.0 Attack Range<br />
+12 Attack Damage<br />
 
 #Commands
 Commands are sent from a C# class inheriting the AI interface.<br />
 Each Unit can only perform 1 command each frame (i.e. you cannot move and attack at the same time).<br />
 ##Command 1: Spawn [Spawns a unit next to the nexus]
-Type (type of unit to spawn)
+Type (type of unit to spawn)<br />
 
 ##Command 2: Move [moves a unit in a certain direction at a distance equal to the unit's movement speed]
-ID (unit to be moved)
-Rotato (direction of movement)
+ID (unit to be moved)<br />
+Rotato (direction of movement)<br />
 
 ##Command 3: Attack [unit attacks another unit. If enemy is out of range, the attack will fail]
-ID (unit that will attack)
-E_ID (unit being attacked)
+ID (unit that will attack)<br />
+E_ID (unit being attacked)<br />
