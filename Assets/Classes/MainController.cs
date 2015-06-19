@@ -35,7 +35,7 @@ public class MainController : MonoBehaviour {
 	private void loadAI()
 	{
 		players [0] = new SwarmAI ();
-		players [1] = new SwarmAI ();
+		players [1] = new DumbMarinesAI ();
 	}
 
 
