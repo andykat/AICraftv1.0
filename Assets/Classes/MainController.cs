@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 public class MainController : MonoBehaviour {
 	public GameObject[] unitObjectPreFabs;
-
+	public GameObject[] wins;
 	//50 fps
 	private float framePeriod = 0.1f;
 	private float timeCurrent = -100000.0f;
@@ -125,13 +125,18 @@ public class MainController : MonoBehaviour {
 	{
 		timeCurrent = -1000000.0f;
 		framePeriod = 1000000.0f;
-
+		int winner = getEnemy (loser);
+		wins [winner].transform.position = new Vector3 (-2.27f, 2.35f, -0.01f);
 
 	}
 
 	//Runs commands received from AI Class
 	private void runCommands(int player, List<Command> lc)
 	{
+		bool[] finishedCommand = new bool[units [player].Count];
+		for (int i=0; i<units[player].Count; i++) {
+			finishedCommand[i] = false;
+		}
 		//only runs first 100 commands
 		int tN = minimum (100, lc.Count);
 		for (int i=0; i<tN; i++) {
@@ -142,13 +147,25 @@ public class MainController : MonoBehaviour {
 			}
 			else if(lc[i].getType() == 2)
 			{
-				//move
-				move(player, lc[i].getSelfID(), lc[i].getFloat(0));
+				int si = idFind(player, lc[i].getSelfID());
+				if(!finishedCommand[si])
+				{
+					//move
+					move(player, lc[i].getSelfID(), lc[i].getFloat(0));
+					finishedCommand[si] = true;
+				}
+
+				
 			}
 			else if(lc[i].getType() == 3)
 			{
-				//attack
-				attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
+				int si = idFind(player, lc[i].getSelfID());
+				if(!finishedCommand[si])
+				{
+					//attack
+					attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
+					finishedCommand[si] = true;
+				}
 			}
 		}
 	}
@@ -266,7 +283,7 @@ public class MainController : MonoBehaviour {
 		unitData [1].setCost (100000);
 
 		//zergling
-		unitData [2] = new Unit (3, 50, 0.2f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
+		unitData [2] = new Unit (3, 50, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0);
 		unitData [2].setCost (50);
 
 		// marine
