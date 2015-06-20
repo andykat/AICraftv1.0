@@ -20,7 +20,7 @@ public class SwarmAI : AI {
 
 		//spawn random units whenever possible
 		Command spawnc = new Command();
-		if (resources < 6) {
+		if (resources < 6 || resources > 79) {
 			currentSpawn = UnityEngine.Random.Range (2, 5);
 		}
 		spawnc.addSpawn (currentSpawn);

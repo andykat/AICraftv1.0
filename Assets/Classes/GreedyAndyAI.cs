@@ -26,8 +26,18 @@ public class GreedyAndyAI : AI {
 		
 		//spawn the counter whenever possible
 		Command spawnc = new Command ();
-		spawnc.addSpawn (smartSpawn());
-		commands.Add (spawnc);
+		int spawnType = smartSpawn ();
+		if (spawnType == 0) {
+			if(resources > 119)
+			{
+				spawnc.addSpawn (2);
+				commands.Add (spawnc);
+			}
+		} else {
+			spawnc.addSpawn (spawnType);
+			commands.Add (spawnc);
+		}
+
 
 
 		//run attack/move commands
@@ -109,6 +119,9 @@ public class GreedyAndyAI : AI {
 				max = unitCounter [i];
 				maxIndex = i;
 			}
+		}
+		if (max == 0) {
+			return 0;
 		}
 		return counter (maxIndex);
 
