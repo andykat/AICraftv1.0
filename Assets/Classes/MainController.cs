@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public class MainController : MonoBehaviour {
 	public GameObject[] unitObjectPreFabs;
 	public GameObject[] wins;
+	public GameObject bulletGO;
 	//50 fps
-	private float framePeriod = 0.1f;
+	private float framePeriod = 0.08f;
 	private float timeCurrent = -100000.0f;
 
 	private float PI = (float)Math.PI;
@@ -31,6 +32,9 @@ public class MainController : MonoBehaviour {
 
 	private List<GameObject>[] unitGOs = new List<GameObject>[2];
 
+	private List<GameObject> bulletGOs = new List<GameObject>();
+	private List<Bullet> bullets = new List<Bullet> ();
+	private float bulletSpeed = 0.4f;
 
 	//Loads the AI that you choose
 	private void loadAI()
@@ -97,9 +101,11 @@ public class MainController : MonoBehaviour {
 		List<Command> p0Commands = players [0].loop (resources [0], units [0], units [1]);
 		List<Command> p1Commands = players [1].loop (resources [1], units [1], units [0]);
 
+		//run commands received from AI.
 		runCommands (0, p0Commands);
 		runCommands (1, p1Commands);
 
+		//check and delete dead units
 		for(int i=0;i<2;i++)
 		{
 			for(int j=0;j<units[i].Count;j++)
@@ -116,8 +122,23 @@ public class MainController : MonoBehaviour {
 						units[i].RemoveAt(j);
 						Destroy(unitGOs[i][j]);
 						unitGOs[i].RemoveAt(j);
+						j--;
 					}
 				}
+			}
+		}
+
+		//update bullets
+		for(int i=0;i<bullets.Count;i++)
+		{
+			bullets[i].iterate();
+			bulletGOs[i].transform.position = new Vector2(bullets[i].getX(), bullets[i].getY ());
+			if(bullets[i].getX() < -10000.0f)
+			{
+				Destroy(bulletGOs[i]);
+				bulletGOs.RemoveAt(i);
+				bullets.RemoveAt(i);
+				i--;
 			}
 		}
 	}
@@ -201,6 +222,14 @@ public class MainController : MonoBehaviour {
 			}
 			units[enemyPlayer][enemyIndex].setHealth(units[enemyPlayer][enemyIndex].getHealth() - 
 			                                         units[player][selfIndex].getAttackDamage());
+
+			//create bullet
+			int tI = bulletGOs.Count;
+			bulletGOs.Add(Instantiate(bulletGO as GameObject));
+			bullets.Add(new Bullet(units[player][selfIndex].getX(),units[player][selfIndex].getY(),units[enemyPlayer][enemyIndex].getX(),units[enemyPlayer][enemyIndex].getY(), bulletSpeed));
+
+			bulletGOs[tI].transform.position = new Vector2(bullets[tI].getX(), bullets[tI].getY ());
+			bulletGOs[tI].transform.eulerAngles = new Vector3(0.0f, 0.0f, bullets[tI].getDir()*180.0f/PI);
 		}
 		
 	}
