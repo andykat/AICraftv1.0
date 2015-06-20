@@ -95,7 +95,7 @@ public class GreedyAndyAI : AI {
 		}
 
 		//if enemy is out of range
-		return (0.5f - ((float)Math.Pow( tDist / maxDistance, distancePower)));
+		return (0.6f - (0.6f * ((float)Math.Pow( tDist / maxDistance, distancePower))));
 	}
 	private float rewardOfAttack(int selfType, int enemyType, float ifAttack, float enemyCurrentHealth, float enemyMaxHealth)
 	{
@@ -169,7 +169,7 @@ public class GreedyAndyAI : AI {
 			}
 			else
 			{
-				return 0.0f;
+				return -10.0f;
 			}
 		} else {
 			if(myUnits[selfIndex].getCanAttackAir())
@@ -178,7 +178,7 @@ public class GreedyAndyAI : AI {
 			}
 			else
 			{
-				return 0.0f;
+				return -10.0f;
 			}
 		}
 	}
