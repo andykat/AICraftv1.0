@@ -4,6 +4,7 @@ using System.Collections;
 public class Unit {
 	private int type = 0;
 	private int cost = 0;
+	private int maxHealth = 0;
 	private int health = 0;
 	private float moveSpeed = 0.0f;
 	private float attackRange = 0.0f;
@@ -16,12 +17,13 @@ public class Unit {
 	private bool isGround = true;
 	private bool canAttackGround = true;
 	private bool canAttackAir = false;
-	public Unit(int tType, int tCost, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, 
+	public Unit(int tType, int tCost, int tMaxHealth, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, 
 	            int tTeam, float tX, float tY, float tRotato, int tid, bool tIsGround, bool tCanAttackGround, 
 	            bool tCanAttackAir)
 	{
 		type = tType;
 		cost = tCost;
+		maxHealth = tMaxHealth;
 		health = tHealth;
 		moveSpeed = tMoveSpeed;
 		attackRange = tAttackRange;
@@ -44,7 +46,9 @@ public class Unit {
 	public void setCost(int tCost){
 		cost = tCost;
 	}
-	
+	public int getMaxHealth(){
+		return maxHealth;
+	}
 	public int getHealth() {return health;}
 	
 	public void setHealth(int newHealth) {health = newHealth;}

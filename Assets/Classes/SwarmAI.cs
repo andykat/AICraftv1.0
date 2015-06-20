@@ -3,24 +3,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 public class SwarmAI : AI {
+	private int resources;
+	private List<Unit> myUnits;
+	private List<Unit> enemyUnits;
+	private int currentSpawn = 3;
 
 	public SwarmAI()
 	{
 	}
-	List<Command> AI.loop(int resources, List<Unit> myUnits, List<Unit> enemyUnits)
+	List<Command> AI.loop(int tResources, List<Unit> tMyUnits, List<Unit> tEnemyUnits)
 	{
+		resources = tResources;
+		myUnits = tMyUnits;
+		enemyUnits = tEnemyUnits;
 		List<Command> commands = new List<Command>();
 
-		//spawn marines whenever possible
+		//spawn random units whenever possible
 		Command spawnc = new Command();
-		spawnc.addSpawn (3);
+		if (resources < 6) {
+			currentSpawn = UnityEngine.Random.Range (2, 5);
+		}
+		spawnc.addSpawn (currentSpawn);
 		commands.Add (spawnc);
 
-		float dir = -1.5708f;
-		if(myUnits[0].getY () - enemyUnits[0].getY () < 0)
-		{
-			dir = 1.5708f;
-		}
 
 		//handle all units
 		for (int i=1; i<myUnits.Count; i++) {
@@ -63,13 +68,18 @@ public class SwarmAI : AI {
 
 				//move forward
 				Command moveC = new Command();
-				moveC.addMove(myUnits[i].getID(), dir);
+				moveC.addMove(myUnits[i].getID(), getDirection(myUnits[i].getX (), myUnits[i].getY (), enemyUnits[0].getX(), enemyUnits[0].getY()));
 				commands.Add (moveC);
 			}
 
 		}
 
 		return commands;
+	}
+
+	private float getDirection(float x1, float y1, float x2, float y2)
+	{
+		return ((float) Math.Atan2 (y2 - y1, x2 - x1 ));
 	}
 
 	private float dist(float x1, float y1, float x2, float y2)

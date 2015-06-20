@@ -11,7 +11,7 @@ public class MainController : MonoBehaviour {
 
 	private float PI = (float)Math.PI;
 
-	private int startingResource = 40;
+	private int startingResource = 200;
 	private int resourceIncrease = 3;
 
 	private float charRadius = 0.5f;
@@ -36,7 +36,7 @@ public class MainController : MonoBehaviour {
 	private void loadAI()
 	{
 		players [0] = new SwarmAI ();
-		players [1] = new DumbMarinesAI ();
+		players [1] = new GreedyAndyAI ();
 	}
 
 
@@ -282,7 +282,7 @@ public class MainController : MonoBehaviour {
 	//sets up Unit
 	private Unit createUnit(int u, int team, float x, float y, float rotato, int id)
 	{
-		Unit tUnit = new Unit (unitData [u].getType(), unitData[u].getCost(), unitData [u].getHealth(), unitData [u].getMoveSpeed(), 
+		Unit tUnit = new Unit (unitData [u].getType(), unitData[u].getCost(), unitData[u].getMaxHealth(), unitData [u].getMaxHealth(), unitData [u].getMoveSpeed(), 
 		                 unitData [u].getAttackRange() , unitData [u].getAttackDamage(), team, x, y, rotato, id, 
 		                       unitData[u].getIsGround(), unitData[u].getCanAttackGround(), unitData[u].getCanAttackAir());
 		return tUnit;
@@ -295,16 +295,16 @@ public class MainController : MonoBehaviour {
 	private void initUnitData()
 	{
 		// base
-		unitData [1] = new Unit (1, 100000, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false);
+		unitData [1] = new Unit (1, 100000, 150, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false);
 
 		//zergling
-		unitData [2] = new Unit (2, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false);
+		unitData [2] = new Unit (2, 40, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false);
 
 		// marine
-		unitData [3] = new Unit (3, 80, 90, 0.1f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true);
+		unitData [3] = new Unit (3, 80, 90, 90, 0.1f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true);
 
 		//the flying triangle
-		unitData [4] = new Unit (4, 80, 35, 0.2f, 1.0f, 12, 0, 0.0f, 0.0f, 0.0f, 0, false, true, true);
+		unitData [4] = new Unit (4, 80, 35, 35, 0.2f, 1.0f, 12, 0, 0.0f, 0.0f, 0.0f, 0, false, true, true);
 
 	}
 
