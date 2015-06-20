@@ -7,7 +7,7 @@ public class GreedyAndyAI : AI {
 	private int resources;
 	private List<Unit> myUnits;
 	private List<Unit> enemyUnits;
-	private static int unitN = 5;
+	private static int unitN = 6;
 	private float maxDistance = 9.45f;
 	private float distancePower = 0.5f;
 	private float percentHealthPower = 2.0f;
@@ -145,18 +145,29 @@ public class GreedyAndyAI : AI {
 		counterValue[2][2] = 0.8f;
 		counterValue[2][3] = 0.9f;
 		counterValue[2][4] = 0.7f;
+		counterValue [2] [5] = 0.3f;
 
 		//marine
 		counterValue[3][1] = 1.0f;
 		counterValue[3][2] = 0.7f;
 		counterValue[3][3] = 0.8f;
 		counterValue[3][4] = 0.9f;
+		counterValue [3] [5] = 0.9f;
 
 		//flying thingy
 		counterValue[4][1] = 1.0f;
 		counterValue[4][2] = 0.9f;
 		counterValue[4][3] = 0.7f;
 		counterValue[4][4] = 0.8f;
+		counterValue [4] [5] = 0.9f;
+
+		//firebat
+		counterValue[5][1] = 0.9f;
+		counterValue[5][2] = 0.9f;
+		counterValue[5][3] = 0.5f;
+		counterValue[5][4] = 0.0f;
+		counterValue[5][5] = 0.8f;
+		
 	}
 
 	//returns 1 if unit cna attack enemy unit
@@ -194,7 +205,11 @@ public class GreedyAndyAI : AI {
 		}
 		if (a == 4) {
 			return 3;
-		} else {
+		}
+		if (a == 5) {
+			return 4;
+		}
+		else {
 			return 3;
 		}
 	}

@@ -24,7 +24,7 @@ public class MainController : MonoBehaviour {
 	private float halfBoardWidth = 2.5f;
 
 	//All data for units
-	private Unit[] unitData = new Unit[5]; 
+	private Unit[] unitData = new Unit[6]; 
 	private List<Unit>[] units = new List<Unit>[2];
 	private AI[] players = new AI[2];
 	private int[] resources = new int[2];
@@ -220,16 +220,50 @@ public class MainController : MonoBehaviour {
 					return;
 				}
 			}
-			units[enemyPlayer][enemyIndex].setHealth(units[enemyPlayer][enemyIndex].getHealth() - 
-			                                         units[player][selfIndex].getAttackDamage());
 
-			//create bullet
-			int tI = bulletGOs.Count;
-			bulletGOs.Add(Instantiate(bulletGO as GameObject));
-			bullets.Add(new Bullet(units[player][selfIndex].getX(),units[player][selfIndex].getY(),units[enemyPlayer][enemyIndex].getX(),units[enemyPlayer][enemyIndex].getY(), bulletSpeed));
+			//if unit is aoe
+			if(units[player][selfIndex].getIsAOE())
+			{
+				float eX = units[enemyPlayer][enemyIndex].getX ();
+				float eY = units[enemyPlayer][enemyIndex].getY ();
+				for(int i=1;i<units[enemyPlayer].Count;i++)
+				{
+					if(units[enemyPlayer][i].getIsGround())
+					{
+						if(dist(eX, eY, units[enemyPlayer][i].getX(), units[enemyPlayer][i].getY ()) < units[player][selfIndex].getAoeRadius())
+						{
+							units[enemyPlayer][i].setHealth(units[enemyPlayer][i].getHealth() - 
+							                                         units[player][selfIndex].getAttackDamage());
 
-			bulletGOs[tI].transform.position = new Vector2(bullets[tI].getX(), bullets[tI].getY ());
-			bulletGOs[tI].transform.eulerAngles = new Vector3(0.0f, 0.0f, bullets[tI].getDir()*180.0f/PI);
+							//create bullet
+							int tI = bulletGOs.Count;
+							bulletGOs.Add(Instantiate(bulletGO as GameObject));
+							bullets.Add(new Bullet(units[player][selfIndex].getX(),units[player][selfIndex].getY(),units[enemyPlayer][i].getX(),units[enemyPlayer][i].getY(), bulletSpeed));
+							
+							bulletGOs[tI].transform.position = new Vector2(bullets[tI].getX(), bullets[tI].getY ());
+							bulletGOs[tI].transform.eulerAngles = new Vector3(0.0f, 0.0f, bullets[tI].getDir()*180.0f/PI);
+						}
+					}
+				}
+			}
+			else
+			{
+				//unit is single target
+
+				//take away health
+				units[enemyPlayer][enemyIndex].setHealth(units[enemyPlayer][enemyIndex].getHealth() - 
+				                                         units[player][selfIndex].getAttackDamage());
+
+				//create bullet
+				int tI = bulletGOs.Count;
+				bulletGOs.Add(Instantiate(bulletGO as GameObject));
+				bullets.Add(new Bullet(units[player][selfIndex].getX(),units[player][selfIndex].getY(),units[enemyPlayer][enemyIndex].getX(),units[enemyPlayer][enemyIndex].getY(), bulletSpeed));
+
+				bulletGOs[tI].transform.position = new Vector2(bullets[tI].getX(), bullets[tI].getY ());
+				bulletGOs[tI].transform.eulerAngles = new Vector3(0.0f, 0.0f, bullets[tI].getDir()*180.0f/PI);
+			}
+
+
 		}
 		
 	}
@@ -272,7 +306,7 @@ public class MainController : MonoBehaviour {
 		float spawnY = units [player] [0].getY() + ((float)Math.Sin (units [player] [0].getRotato())) * 0.5f;
 		Unit newUnit;
 		//add unit to list
-		if (type < 2 || type > 4) {
+		if (type < 2 || type > 5) {
 			//wrong type
 			return;
 		}
@@ -312,8 +346,9 @@ public class MainController : MonoBehaviour {
 	private Unit createUnit(int u, int team, float x, float y, float rotato, int id)
 	{
 		Unit tUnit = new Unit (unitData [u].getType(), unitData[u].getCost(), unitData[u].getMaxHealth(), unitData [u].getMaxHealth(), unitData [u].getMoveSpeed(), 
-		                 unitData [u].getAttackRange() , unitData [u].getAttackDamage(), team, x, y, rotato, id, 
-		                       unitData[u].getIsGround(), unitData[u].getCanAttackGround(), unitData[u].getCanAttackAir());
+		               		   unitData [u].getAttackRange() , unitData [u].getAttackDamage(), team, x, y, rotato, id, 
+		                       unitData[u].getIsGround(), unitData[u].getCanAttackGround(), unitData[u].getCanAttackAir(), 
+		                       unitData[u].getIsAOE(), unitData[u].getAoeRadius());
 		return tUnit;
 
 	}
@@ -324,16 +359,19 @@ public class MainController : MonoBehaviour {
 	private void initUnitData()
 	{
 		// base
-		unitData [1] = new Unit (1, 100000, 150, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false);
+		unitData [1] = new Unit (1, 100000, 150, 150, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, true, false, false, false, 0.0f);
 
 		//zergling
-		unitData [2] = new Unit (2, 40, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false);
+		unitData [2] = new Unit (2, 40, 40, 40, 0.3f, 0.6f, 10, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false, false, 0.0f);
 
 		// marine
-		unitData [3] = new Unit (3, 80, 90, 90, 0.1f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true);
+		unitData [3] = new Unit (3, 80, 97, 97, 0.10f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, true, false, 0.0f);
 
 		//the flying triangle
-		unitData [4] = new Unit (4, 80, 35, 35, 0.2f, 1.0f, 12, 0, 0.0f, 0.0f, 0.0f, 0, false, true, true);
+		unitData [4] = new Unit (4, 80, 35, 35, 0.2f, 1.0f, 12, 0, 0.0f, 0.0f, 0.0f, 0, false, true, true, false, 0.0f);
+
+		// firebat
+		unitData [5] = new Unit (5, 100, 60, 60, 0.15f, 1.4f, 5, 0, 0.0f, 0.0f, 0.0f, 0, true, true, false, true, 0.7f);
 
 	}
 

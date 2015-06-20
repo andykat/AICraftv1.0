@@ -2,13 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-public class SwarmAI : AI {
+public class SwarmFireBatAI : AI {
 	private int resources;
 	private List<Unit> myUnits;
 	private List<Unit> enemyUnits;
 	private int currentSpawn = 3;
-
-	public SwarmAI()
+	
+	public SwarmFireBatAI()
 	{
 	}
 	List<Command> AI.loop(int tResources, List<Unit> tMyUnits, List<Unit> tEnemyUnits)
@@ -17,16 +17,16 @@ public class SwarmAI : AI {
 		myUnits = tMyUnits;
 		enemyUnits = tEnemyUnits;
 		List<Command> commands = new List<Command>();
-
+		
 		//spawn random units whenever possible
 		Command spawnc = new Command();
 		if (resources < 6 || resources > 99) {
-			currentSpawn = UnityEngine.Random.Range (2, 6);
+			currentSpawn = UnityEngine.Random.Range (5, 5);
 		}
 		spawnc.addSpawn (currentSpawn);
 		commands.Add (spawnc);
-
-
+		
+		
 		//handle all units
 		for (int i=1; i<myUnits.Count; i++) {
 			//gets coordinates and attackRange of unit
@@ -61,27 +61,27 @@ public class SwarmAI : AI {
 					break;
 				}
 			}
-
+			
 			if(!attacked)
 			{
 				//did not find someone to attack
-
+				
 				//move forward
 				Command moveC = new Command();
 				moveC.addMove(myUnits[i].getID(), getDirection(myUnits[i].getX (), myUnits[i].getY (), enemyUnits[0].getX(), enemyUnits[0].getY()));
 				commands.Add (moveC);
 			}
-
+			
 		}
-
+		
 		return commands;
 	}
-
+	
 	private float getDirection(float x1, float y1, float x2, float y2)
 	{
 		return ((float) Math.Atan2 (y2 - y1, x2 - x1 ));
 	}
-
+	
 	private float dist(float x1, float y1, float x2, float y2)
 	{
 		return ((float)Math.Sqrt(((double) (  (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)  )   )));

@@ -17,9 +17,12 @@ public class Unit {
 	private bool isGround = true;
 	private bool canAttackGround = true;
 	private bool canAttackAir = false;
+	private bool isAOE = false;
+	private float aoeRadius = 0.0f;
+
 	public Unit(int tType, int tCost, int tMaxHealth, int tHealth, float tMoveSpeed, float tAttackRange, int tAttackDamage, 
 	            int tTeam, float tX, float tY, float tRotato, int tid, bool tIsGround, bool tCanAttackGround, 
-	            bool tCanAttackAir)
+	            bool tCanAttackAir, bool tIsAOE, float tAoeRadius)
 	{
 		type = tType;
 		cost = tCost;
@@ -36,6 +39,8 @@ public class Unit {
 		isGround = tIsGround;
 		canAttackGround = tCanAttackGround;
 		canAttackAir = tCanAttackAir;
+		isAOE = tIsAOE;
+		aoeRadius = tAoeRadius;
 	}
 
 	public int getType() {return type;}
@@ -85,5 +90,14 @@ public class Unit {
 	}
 	public bool getCanAttackAir(){
 		return canAttackAir;
+	}
+
+	public bool getIsAOE()
+	{
+		return isAOE;
+	}
+	public float getAoeRadius()
+	{
+		return aoeRadius;
 	}
 }
