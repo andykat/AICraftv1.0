@@ -21,15 +21,15 @@ May be given attack in the future<br />
 40 Gold<br />
 40 Health<br />
 0.3 movement speed<br />
-0.2 attack range<br />
+0.6 attack range<br />
 10 attack damage<br />
 only attacks ground<br />
 
 ###Marine
 80 Gold<br />
-90 health<br />
+97 health<br />
 0.1 movement speed<br />
-0.6 attack range<br />
+1.4 attack range<br />
 5 attack damage<br />
 attacks ground and air <br />
 
@@ -41,6 +41,15 @@ flying unit <br />
 1.0 Attack Range<br />
 12 Attack Damage<br />
 attack ground and air <br />
+
+###Firebat
+100 Gold<br />
+60 health<br />
+0.15 movement speed<br />
+1.4 attack range<br />
+5 attack damage<br />
+attacks ground <br />
+0.7 aoe attack radius <br />
 
 #Commands
 Commands are sent from a C# class inheriting the AI interface.<br />
