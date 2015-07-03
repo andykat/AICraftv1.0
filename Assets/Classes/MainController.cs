@@ -102,8 +102,8 @@ public class MainController : MonoBehaviour {
 		List<Command> p1Commands = players [1].loop (resources [1], units [1], units [0]);
 
 		//run commands received from AI.
-		runCommands (0, p0Commands);
-		runCommands (1, p1Commands);
+		runCommands (p0Commands, p1Commands);
+
 
 		//check and delete dead units
 		for(int i=0;i<2;i++)
@@ -153,40 +153,84 @@ public class MainController : MonoBehaviour {
 	}
 
 	//Runs commands received from AI Class
-	private void runCommands(int player, List<Command> lc)
+	private void runCommands(List<Command> lc0, List<Command> lc1)
 	{
-		bool[] finishedCommand = new bool[units [player].Count];
-		for (int i=0; i<units[player].Count; i++) {
+		bool[] finishedCommand = new bool[units [0].Count];
+		for (int i=0; i<units[0].Count; i++) {
 			finishedCommand[i] = false;
 		}
-		//only runs first 100 commands
-		int tN = minimum (100, lc.Count);
-		for (int i=0; i<tN; i++) {
-			if(lc[i].getType() == 1)
-			{
-				//spawn
-				spawn(player, lc[i].getInt(0));
-			}
-			else if(lc[i].getType() == 2)
-			{
-				int si = idFind(player, lc[i].getSelfID());
-				if(!finishedCommand[si])
-				{
-					//move
-					move(player, lc[i].getSelfID(), lc[i].getFloat(0));
-					finishedCommand[si] = true;
-				}
 
-				
-			}
-			else if(lc[i].getType() == 3)
+		bool[] finishedCommand1 = new bool[units [1].Count];
+		for (int i=0; i<units[1].Count; i++) {
+			finishedCommand1[i] = false;
+		}
+
+		//only runs first 100 commands
+		int tN = minimum (100, lc0.Count);
+		int tN1 = minimum (100, lc1.Count);
+
+		//run attack commands for player 0
+		for (int i=0; i<tN; i++) {
+			if(lc0[i].getType() == 3)
 			{
-				int si = idFind(player, lc[i].getSelfID());
+				int si = idFind(0, lc0[i].getSelfID());
 				if(!finishedCommand[si])
 				{
 					//attack
-					attack(player, lc[i].getSelfID(), lc[i].getEnemyID());
+					attack(0, lc0[i].getSelfID(), lc0[i].getEnemyID());
 					finishedCommand[si] = true;
+				}
+			}
+		}
+
+		//run attack commands for player 1
+		for (int i=0; i<tN1; i++) {
+			if(lc1[i].getType() == 3)
+			{
+				int si = idFind(1, lc1[i].getSelfID());
+				if(!finishedCommand1[si])
+				{
+					//attack
+					attack(1, lc1[i].getSelfID(), lc1[i].getEnemyID());
+					finishedCommand1[si] = true;
+				}
+			}
+		}
+
+		//run non attack commands for player 0
+		for (int i=0; i<tN; i++) {
+			if(lc0[i].getType() == 1)
+			{
+				//spawn
+				spawn(0, lc0[i].getInt(0));
+			}
+			else if(lc0[i].getType() == 2)
+			{
+				int si = idFind(0, lc0[i].getSelfID());
+				if(!finishedCommand[si])
+				{
+					//move
+					move(0, lc0[i].getSelfID(), lc0[i].getFloat(0));
+					finishedCommand[si] = true;
+				}
+			}
+		}
+
+		//run non attack commands for player 1
+		for (int i=0; i<tN1; i++) {
+			if(lc1[i].getType() == 1)
+			{
+				//spawn
+				spawn(1, lc1[i].getInt(0));
+			}
+			else if(lc1[i].getType() == 2)
+			{
+				int si = idFind(1, lc1[i].getSelfID());
+				if(!finishedCommand1[si])
+				{
+					//move
+					move(1, lc1[i].getSelfID(), lc1[i].getFloat(0));
+					finishedCommand1[si] = true;
 				}
 			}
 		}
